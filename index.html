@@ -552,7 +552,8 @@ function startApp() {
 
   canvas = document.getElementById('painting');
   resizeCanvas();
-  window.addEventListener('resize', () => { resizeCanvas(); redrawAll(); });
+  initGravityGrid();
+  window.addEventListener('resize', () => { resizeCanvas(); initGravityGrid(); redrawAll(); });
 
   const j = document.getElementById('journal');
   j.addEventListener('keydown', onKey);
@@ -579,13 +580,100 @@ const IGNORE_KEYS  = new Set(['Shift','Control','Alt','Meta','ArrowUp','ArrowDow
   'CapsLock','Insert','F1','F2','F3','F4','F5','F6','F7','F8','F9','F10','F11','F12']);
 const DELETE_KEYS  = new Set(['Backspace','Delete']);
 
+// ══════════════════════════════════════════════════════════════════
+//  CLUSTER SYSTEM — Option A + D
+//
+//  Each word gets a cluster center spawned when the previous
+//  word boundary (space/punctuation) was hit. Strokes for that
+//  word are pulled toward their cluster center with gaussian-ish
+//  scatter. Gravity radius ~100px — tight enough to be distinct,
+//  loose enough to feel painterly.
+//
+//  A grid of soft gravity zones (Option A) also exists underneath,
+//  biasing the cluster spawn points so they naturally spread across
+//  the canvas rather than all piling in one area.
+// ══════════════════════════════════════════════════════════════════
+let clusters        = [];   // { cx, cy, strokeCount }
+let currentCluster  = null; // cluster strokes are being added to now
+
+// 4×3 gravity grid — 12 zones distributed across canvas
+// Each zone has a center and a "weight" that increases as it fills up.
+// New clusters prefer less-filled zones.
+let gravityGrid = [];
+
+function initGravityGrid() {
+  gravityGrid = [];
+  const W = canvas.width, H = canvas.height;
+  const cols = 4, rows = 3;
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      gravityGrid.push({
+        cx: (c + 0.5) / cols * W,
+        cy: (r + 0.5) / rows * H,
+        weight: 0,
+      });
+    }
+  }
+}
+
+function spawnCluster() {
+  const W = canvas.width, H = canvas.height;
+
+  // Pick the least-filled gravity zone, with some randomness so
+  // it doesn't always go to exactly the same spot.
+  const sorted = [...gravityGrid].sort((a, b) => a.weight - b.weight);
+  // Choose among the 4 least-filled zones randomly
+  const zone = sorted[Math.floor(Math.random() * Math.min(4, sorted.length))];
+
+  // Jitter within the zone so clusters don't stack exactly
+  const jitter = 80;
+  const cx = Math.max(60, Math.min(W - 60, zone.cx + (Math.random() - 0.5) * jitter * 2));
+  const cy = Math.max(60, Math.min(H - 60, zone.cy + (Math.random() - 0.5) * jitter * 2));
+
+  const cluster = { cx, cy, strokeCount: 0, zoneRef: zone };
+  clusters.push(cluster);
+  currentCluster = cluster;
+  return cluster;
+}
+
+function getStrokePosition(isSplash) {
+  const W = canvas.width, H = canvas.height;
+
+  // Splash keys (space, punctuation) spawn a new cluster
+  if (isSplash || !currentCluster) {
+    const cl = spawnCluster();
+    // The splash stroke itself lands right at cluster center with tiny scatter
+    const x = cl.cx + (Math.random() - 0.5) * 20;
+    const y = cl.cy + (Math.random() - 0.5) * 20;
+    return { x, y };
+  }
+
+  // Regular character — gaussian pull toward current cluster
+  // Scatter radius: starts at ~110px, tightens slightly as word grows
+  const base   = 110;
+  const tighten = Math.min(30, currentCluster.strokeCount * 2.5);
+  const radius  = base - tighten;
+
+  // Box-Muller gaussian approximation using two uniforms
+  const u1 = Math.random(), u2 = Math.random();
+  const mag = radius * Math.sqrt(-2 * Math.log(Math.max(u1, 0.0001)));
+  const ang = 2 * Math.PI * u2;
+  const x = Math.max(20, Math.min(W - 20, currentCluster.cx + mag * Math.cos(ang)));
+  const y = Math.max(20, Math.min(H - 20, currentCluster.cy + mag * Math.sin(ang)));
+
+  currentCluster.strokeCount++;
+  // Update zone weight so future clusters avoid this area
+  if (currentCluster.zoneRef) currentCluster.zoneRef.weight++;
+
+  return { x, y };
+}
+
 // Track paste state so onInput knows to paint pasted characters
 let isPasting = false;
 let prevText  = '';
 
 function onKey(e) {
   if (IGNORE_KEYS.has(e.key) || DELETE_KEYS.has(e.key)) return;
-
   const key = e.key === 'Enter' ? '\n' : e.key;
   paintChar(key);
   updateStats();
@@ -601,9 +689,7 @@ function paintChar(key) {
   const satBoost  = Math.min(10, freq * 0.4);
   const isSplash  = SPLASH_KEYS.has(key);
 
-  const W = canvas.width, H = canvas.height;
-  const x = Math.random() * W;
-  const y = Math.random() * H;
+  const { x, y } = getStrokePosition(isSplash);
   const rands = Array.from({length: 20}, () => Math.random());
 
   addStroke({ key, h, s: s + satBoost, l, isSplash, x, y, rands, dimmed: false });
@@ -796,10 +882,12 @@ function flashSplash() {
 function clearAll() {
   if (!confirm("Clear today's painting and text?")) return;
   strokeStack = [];
+  clusters = []; currentCluster = null;
+  initGravityGrid();
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   sessionCounts = {}; totalKeystrokes = 0;
   document.getElementById('journal').value = '';
-  prevTextLength = 0;
+  prevTextLength = 0; prevText = '';
   updateStats();
 }
 
