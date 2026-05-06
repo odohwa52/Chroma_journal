@@ -11,7 +11,6 @@
   --panel-l: #f5f2ec;
   --panel-r: #fdfbf8;
   --border: rgba(0,0,0,0.08);
-  --border-mid: rgba(0,0,0,0.05);
   --text: #1a1814;
   --muted: rgba(26,24,20,0.42);
   --accent: #9b6e3a;
@@ -26,31 +25,22 @@ html, body { height:100%; overflow:hidden; background:var(--bg); color:var(--tex
   background:var(--bg);
   display:flex; flex-direction:column;
   align-items:center; justify-content:center;
-  padding:40px 24px;
-  overflow-y:auto;
+  padding:40px 24px; overflow-y:auto;
 }
 #setup.hidden { display:none; }
-
 .setup-title {
   font-family:'Cormorant Garamond', serif;
-  font-size:clamp(34px,5vw,54px);
-  font-weight:300; letter-spacing:-0.5px;
-  color:var(--text); text-align:center;
-  margin-bottom:6px;
+  font-size:clamp(34px,5vw,54px); font-weight:300; letter-spacing:-0.5px;
+  color:var(--text); text-align:center; margin-bottom:6px;
 }
 .setup-sub {
   font-size:10px; letter-spacing:2.5px; color:var(--muted);
   text-transform:uppercase; text-align:center; margin-bottom:48px;
 }
-.setup-section { width:100%; max-width:800px; margin-bottom:36px; }
-.setup-label {
-  font-size:9px; letter-spacing:3px; text-transform:uppercase;
-  color:var(--accent); margin-bottom:14px;
-}
+.setup-section { width:100%; max-width:820px; margin-bottom:36px; }
+.setup-label { font-size:9px; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin-bottom:14px; }
 
-.style-grid {
-  display:grid; grid-template-columns:repeat(5,1fr); gap:10px;
-}
+.style-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:10px; }
 .style-btn {
   background:#fff; border:1px solid var(--border); border-radius:6px;
   cursor:pointer; padding:0; overflow:hidden;
@@ -68,9 +58,7 @@ html, body { height:100%; overflow:hidden; background:var(--bg); color:var(--tex
 }
 .style-btn.active span { color:var(--accent); }
 
-.palette-grid {
-  display:grid; grid-template-columns:repeat(5,1fr); gap:10px;
-}
+.palette-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:10px; }
 .palette-btn {
   background:#fff; border:1px solid var(--border); border-radius:6px;
   cursor:pointer; padding:14px 10px 12px;
@@ -81,14 +69,13 @@ html, body { height:100%; overflow:hidden; background:var(--bg); color:var(--tex
 .palette-btn:hover { border-color:rgba(0,0,0,0.2); transform:translateY(-2px); box-shadow:0 4px 12px rgba(0,0,0,0.08); }
 .palette-btn.active { border-color:var(--accent); box-shadow:0 0 0 2px var(--accent-light); }
 .palette-swatches { display:flex; gap:4px; flex-wrap:wrap; justify-content:center; }
-.swatch { width:14px; height:14px; border-radius:50%; }
+.swatch { width:13px; height:13px; border-radius:50%; }
 .palette-name { font-size:9px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); }
 .palette-btn.active .palette-name { color:var(--accent); }
 
 .start-btn {
-  background:var(--accent); color:#fff;
-  border:none; border-radius:4px; padding:14px 52px;
-  font-family:'Azeret Mono', monospace;
+  background:var(--accent); color:#fff; border:none; border-radius:4px;
+  padding:14px 52px; font-family:'Azeret Mono', monospace;
   font-size:11px; letter-spacing:3px; text-transform:uppercase;
   cursor:pointer; margin-top:8px;
   transition:opacity 200ms, transform 150ms;
@@ -103,15 +90,12 @@ html, body { height:100%; overflow:hidden; background:var(--bg); color:var(--tex
 #topbar {
   height:46px; min-height:46px;
   display:flex; align-items:center; justify-content:space-between;
-  padding:0 20px;
-  border-bottom:1px solid var(--border);
-  background:var(--bg);
-  z-index:10;
+  padding:0 20px; border-bottom:1px solid var(--border);
+  background:var(--bg); z-index:10;
 }
 .topbar-left {
   font-family:'Cormorant Garamond', serif;
-  font-size:18px; font-weight:300; font-style:italic;
-  color:var(--text); letter-spacing:0.5px;
+  font-size:18px; font-weight:300; font-style:italic; letter-spacing:0.5px;
 }
 .topbar-center { font-size:10px; letter-spacing:2px; color:var(--muted); text-transform:uppercase; }
 .topbar-right { display:flex; align-items:center; gap:10px; }
@@ -119,37 +103,30 @@ html, body { height:100%; overflow:hidden; background:var(--bg); color:var(--tex
   background:none; border:1px solid var(--border); border-radius:3px;
   color:var(--muted); font-family:'Azeret Mono',monospace;
   font-size:9px; letter-spacing:2px; text-transform:uppercase;
-  padding:5px 10px; cursor:pointer;
-  transition:border-color 150ms, color 150ms;
+  padding:5px 10px; cursor:pointer; transition:border-color 150ms, color 150ms;
 }
 .top-btn:hover { border-color:var(--accent); color:var(--accent); }
 .top-btn.primary { border-color:var(--accent); color:var(--accent); }
 
 #split { flex:1; display:flex; overflow:hidden; }
-
 #canvas-panel {
   flex:1; position:relative; background:var(--panel-l);
-  border-right:1px solid var(--border);
-  overflow:hidden;
+  border-right:1px solid var(--border); overflow:hidden;
 }
 #painting { position:absolute; inset:0; display:block; }
 
 #stats {
   position:absolute; bottom:16px; left:16px;
-  display:flex; flex-direction:column; gap:4px;
-  pointer-events:none;
+  display:flex; flex-direction:column; gap:4px; pointer-events:none;
 }
-.stat { font-size:9px; letter-spacing:1.5px; color:rgba(0,0,0,0.22); text-transform:uppercase; }
-
+.stat { font-size:9px; letter-spacing:1.5px; color:rgba(0,0,0,0.2); text-transform:uppercase; }
 
 #write-panel {
   width:42%; min-width:320px; max-width:560px;
-  display:flex; flex-direction:column;
-  background:var(--panel-r);
+  display:flex; flex-direction:column; background:var(--panel-r);
 }
 #write-header {
-  padding:16px 24px 12px;
-  border-bottom:1px solid var(--border);
+  padding:16px 24px 12px; border-bottom:1px solid var(--border);
   display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;
 }
 .date-display {
@@ -161,34 +138,28 @@ html, body { height:100%; overflow:hidden; background:var(--bg); color:var(--tex
   text-transform:uppercase; border:1px solid rgba(155,110,58,0.3);
   padding:2px 7px; border-radius:20px;
 }
-
 #journal {
   flex:1; resize:none; border:none; outline:none;
   background:transparent; color:var(--text);
   font-family:'Cormorant Garamond',serif;
   font-size:18px; line-height:1.9; font-weight:300;
-  padding:28px 28px 28px 24px;
-  caret-color:var(--accent);
-  overflow-y:auto;
+  padding:28px 28px 28px 24px; caret-color:var(--accent); overflow-y:auto;
 }
-#journal::placeholder { color:rgba(26,24,20,0.2); font-style:italic; }
-
+#journal::placeholder { color:rgba(26,24,20,0.18); font-style:italic; }
 #write-footer {
-  padding:10px 20px;
-  border-top:1px solid var(--border);
+  padding:10px 20px; border-top:1px solid var(--border);
   display:flex; align-items:center; justify-content:space-between;
 }
 .wc { font-size:9px; letter-spacing:1.5px; color:var(--muted); text-transform:uppercase; }
-.splash-indicator {
+.splash-dot {
   width:6px; height:6px; border-radius:50%;
   background:var(--accent); opacity:0; transition:opacity 80ms;
 }
-.splash-indicator.flash { opacity:1; }
+.splash-dot.flash { opacity:1; }
 </style>
 </head>
 <body>
 
-<!-- SETUP -->
 <div id="setup">
   <div class="setup-title">Chroma Journal</div>
   <div class="setup-sub">Set the mood before you write</div>
@@ -203,7 +174,6 @@ html, body { height:100%; overflow:hidden; background:var(--bg); color:var(--tex
   <button class="start-btn" id="startBtn">Begin Today's Entry →</button>
 </div>
 
-<!-- APP -->
 <div id="app">
   <div id="topbar">
     <div class="topbar-left">Chroma Journal</div>
@@ -229,7 +199,7 @@ html, body { height:100%; overflow:hidden; background:var(--bg); color:var(--tex
       <textarea id="journal" placeholder="Start writing. The canvas listens.&#10;&#10;Switch between English and Korean freely — every keystroke leaves its colour."></textarea>
       <div id="write-footer">
         <div class="wc" id="wcDisplay">0 words</div>
-        <div class="splash-indicator" id="splashDot"></div>
+        <div class="splash-dot" id="splashDot"></div>
       </div>
     </div>
   </div>
@@ -237,94 +207,225 @@ html, body { height:100%; overflow:hidden; background:var(--bg); color:var(--tex
 
 <script>
 // ══════════════════════════════════════════════════════════════════
-//  FREQUENCY & PALETTE DATA
+//  PER-KEY COLOUR MAP
+//  Every typeable key gets a unique, hand-designed hue so colours
+//  are maximally distinct. Common keys get palette-central hues;
+//  rare keys get vivid accent hues. Saturation/lightness are fixed
+//  per key so they read well on a light canvas.
+//
+//  Structure: key → [hue, sat%, lit%]
+//  Hues are spread across the full 360° wheel, no two adjacent
+//  keys share the same hue family.
 // ══════════════════════════════════════════════════════════════════
-const EN_FREQ_RANK   = 'etaoinshrdlcumwfgypbvkjxqz';
-const KO_CONS_RANK   = 'ㅇㄴㄱㄹㅅㅎㄷㅈㅁㅂㅍㅌㅊㅋㄲ';
-const KO_VOWEL_RANK  = 'ㅏㅣㅡㅓㅗㅜㅐㅔㅑㅕㅛㅠㅒㅖ';
-const QWERTY_TO_KO   = {
-  q:'ㅂ',w:'ㅈ',e:'ㄷ',r:'ㄱ',t:'ㅅ',y:'ㅛ',u:'ㅕ',i:'ㅑ',o:'ㅐ',p:'ㅔ',
-  a:'ㅁ',s:'ㄴ',d:'ㅇ',f:'ㄹ',g:'ㅎ',h:'ㅗ',j:'ㅓ',k:'ㅏ',l:'ㅣ',
-  z:'ㅋ',x:'ㅌ',c:'ㅊ',v:'ㅍ',b:'ㅠ',n:'ㅜ',m:'ㅡ'
+
+// Base hue map — every key on a standard keyboard gets a unique hue.
+// English letters ordered by frequency (e=most common → z=rarest).
+// Common letters get palette-appropriate hues (mid-saturation).
+// Rare letters get vivid, electric hues that pop when they appear.
+const KEY_HUES = {
+  // ── English letters (frequency order: e t a o i n s r h d l c u m w f g y p b v k j x q z)
+  'e':  [210, 65, 48],   // steel blue — most common, calm anchor
+  't':  [28,  72, 50],   // burnt orange
+  'a':  [160, 55, 44],   // forest green
+  'o':  [38,  78, 55],   // warm amber
+  'i':  [190, 60, 50],   // teal
+  'n':  [350, 62, 50],   // dusty rose-red
+  's':  [270, 50, 52],   // soft purple
+  'r':  [15,  70, 48],   // terracotta
+  'h':  [140, 48, 46],   // sage green
+  'd':  [48,  75, 52],   // golden yellow
+  'l':  [220, 58, 52],   // periwinkle
+  'c':  [5,   68, 50],   // deep red-orange
+  'u':  [175, 55, 48],   // sea green
+  'm':  [300, 48, 48],   // mauve
+  'w':  [60,  70, 48],   // olive-yellow
+  'f':  [245, 55, 52],   // slate blue
+  'g':  [85,  58, 46],   // moss green
+  'y':  [330, 60, 52],   // hot pink
+  'p':  [195, 62, 46],   // ocean blue
+  'b':  [20,  80, 46],   // rust
+  'v':  [155, 65, 42],   // deep emerald
+  'k':  [280, 65, 46],   // violet
+  'j':  [310, 70, 48],   // orchid — starts rare territory
+  'x':  [75,  80, 44],   // acid green — vivid, rarely seen
+  'q':  [55,  90, 46],   // electric gold
+  'z':  [185, 85, 42],   // electric cyan — rarest, pops hard
+
+  // ── Numbers (fairly rare in prose)
+  '1':  [35,  75, 50],
+  '2':  [200, 65, 50],
+  '3':  [120, 62, 46],
+  '4':  [340, 68, 50],
+  '5':  [260, 62, 50],
+  '6':  [80,  72, 46],
+  '7':  [305, 68, 48],
+  '8':  [20,  78, 48],
+  '9':  [165, 70, 46],
+  '0':  [230, 60, 52],
+
+  // ── Common punctuation (visible but quieter)
+  ' ':  [210, 30, 65],   // very pale blue — space is everywhere, should be subtle
+  '.':  [200, 40, 58],
+  ',':  [190, 38, 60],
+  '!':  [350, 75, 50],
+  '?':  [320, 68, 50],
+  '-':  [220, 35, 58],
+  "'":  [240, 32, 62],
+  '"':  [250, 35, 60],
+  ':':  [210, 42, 56],
+  ';':  [215, 40, 58],
+  '\n': [160, 28, 65],   // Enter — very subtle wash
+
+  // ── Rare symbols — vivid, electric, surprising
+  '@':  [295, 85, 46],
+  '#':  [65,  88, 44],
+  '$':  [145, 82, 42],
+  '%':  [15,  85, 46],
+  '^':  [185, 88, 40],
+  '&':  [330, 82, 46],
+  '*':  [55,  92, 44],
+  '(':  [275, 70, 50],
+  ')':  [270, 72, 50],
+  '[':  [195, 72, 48],
+  ']':  [190, 74, 48],
+  '{':  [305, 78, 46],
+  '}':  [310, 76, 46],
+  '+':  [100, 78, 44],
+  '=':  [105, 75, 46],
+  '<':  [355, 80, 48],
+  '>':  [10,  82, 46],
+  '/':  [235, 65, 52],
+  '\\': [230, 68, 50],
+  '|':  [225, 70, 50],
+  '`':  [170, 80, 42],
+  '~':  [175, 82, 40],
+  '_':  [215, 38, 62],
 };
 
+// Korean keys — mapped via QWERTY physical key position.
+// Each Korean character gets its own distinct hue.
+const QWERTY_TO_KO = {
+  q:'ㅂ', w:'ㅈ', e:'ㄷ', r:'ㄱ', t:'ㅅ',
+  y:'ㅛ', u:'ㅕ', i:'ㅑ', o:'ㅐ', p:'ㅔ',
+  a:'ㅁ', s:'ㄴ', d:'ㅇ', f:'ㄹ', g:'ㅎ',
+  h:'ㅗ', j:'ㅓ', k:'ㅏ', l:'ㅣ',
+  z:'ㅋ', x:'ㅌ', c:'ㅊ', v:'ㅍ',
+  b:'ㅠ', n:'ㅜ', m:'ㅡ'
+};
+
+// Korean character hues — vowels (common) get calm hues,
+// consonants spread across mid-range, rare ones get vivid hues.
+const KO_HUES = {
+  'ㅏ': [32,  72, 54],   // warm amber — most common vowel
+  'ㅣ': [205, 62, 50],   // blue
+  'ㅡ': [170, 52, 50],   // teal-green
+  'ㅓ': [355, 58, 52],   // rose
+  'ㅗ': [48,  68, 52],   // gold
+  'ㅜ': [215, 58, 50],   // periwinkle
+  'ㅐ': [130, 55, 48],   // green
+  'ㅔ': [290, 55, 50],   // purple
+  'ㅑ': [18,  70, 50],   // orange-red
+  'ㅕ': [165, 60, 48],   // emerald
+  'ㅛ': [330, 65, 50],   // pink
+  'ㅠ': [240, 62, 50],   // indigo
+  'ㅒ': [75,  72, 46],   // lime
+  'ㅖ': [300, 68, 48],   // orchid
+  'ㅇ': [200, 55, 48],   // most common consonant — ocean blue
+  'ㄴ': [25,  68, 50],   // rust-orange
+  'ㄱ': [150, 58, 46],   // forest
+  'ㄹ': [345, 62, 50],   // deep rose
+  'ㅅ': [55,  72, 48],   // amber-yellow
+  'ㅎ': [270, 55, 50],   // violet
+  'ㄷ': [185, 65, 46],   // cyan
+  'ㅈ': [310, 65, 50],   // fuchsia
+  'ㅁ': [95,  60, 46],   // olive
+  'ㅂ': [230, 62, 50],   // steel blue
+  'ㅍ': [15,  78, 48],   // terracotta
+  'ㅌ': [135, 68, 44],   // deep green
+  'ㅊ': [350, 72, 48],   // crimson
+  'ㅋ': [65,  80, 44],   // electric lime — rare
+  'ㄲ': [175, 82, 42],   // electric teal — rare
+};
+
+// ── PALETTES — each palette shifts the hue, sat, lit of all keys
+// so the painting stays in the right emotional colour space.
+// We don't replace colours, we tint the whole system.
 const PALETTES = {
-  beach:{
+  beach: {
     name:'Beach', emoji:'🌊',
-    bands:[{h:195,s:60,l:55},{h:42,s:70,l:58},{h:175,s:55,l:48},{h:210,s:65,l:44},{h:20,s:75,l:52},{h:280,s:60,l:52}],
-    swatches:['#4ab8cc','#d4a84a','#38a890','#2d6aa0','#d85e28','#9060c0'],
+    // hue rotation applied to all keys, plus sat/lit mod
+    hueShift: 0, satMod: 1.0, litMod: 1.05,
+    swatches: ['#4ab8cc','#d4a84a','#38a890','#2d6aa0','#d85e28','#9060c0'],
   },
-  city:{
+  city: {
     name:'City', emoji:'🌆',
-    bands:[{h:220,s:55,l:48},{h:35,s:80,l:45},{h:200,s:40,l:38},{h:350,s:65,l:44},{h:60,s:90,l:42},{h:150,s:70,l:38}],
-    swatches:['#4466aa','#b86818','#3a6878','#aa2240','#b89008','#189048'],
+    hueShift: -15, satMod: 0.9, litMod: 0.92,
+    swatches: ['#4466aa','#b86818','#3a6878','#aa2240','#b89008','#189048'],
   },
-  soft:{
+  soft: {
     name:'Soft', emoji:'🌸',
-    bands:[{h:340,s:55,l:60},{h:265,s:45,l:62},{h:55,s:60,l:60},{h:160,s:40,l:56},{h:20,s:60,l:62},{h:190,s:50,l:55}],
-    swatches:['#d87098','#9878c0','#c8b040','#60a888','#d08060','#58a8c0'],
+    hueShift: 20, satMod: 0.75, litMod: 1.12,
+    swatches: ['#d87098','#9878c0','#c8b040','#60a888','#d08060','#58a8c0'],
   },
-  night:{
+  night: {
     name:'Night', emoji:'🌙',
-    bands:[{h:240,s:60,l:44},{h:280,s:55,l:44},{h:210,s:65,l:38},{h:300,s:50,l:36},{h:180,s:70,l:34},{h:55,s:90,l:50}],
-    swatches:['#3848aa','#6838aa','#1e4e88','#682880','#106070','#b09820'],
+    hueShift: -30, satMod: 0.85, litMod: 0.78,
+    swatches: ['#3848aa','#6838aa','#1e4e88','#682880','#106070','#b09820'],
   },
-  intense:{
+  intense: {
     name:'Intense', emoji:'🔥',
-    bands:[{h:5,s:85,l:42},{h:30,s:90,l:40},{h:45,s:95,l:38},{h:340,s:80,l:38},{h:270,s:70,l:36},{h:150,s:80,l:32}],
-    swatches:['#b01808','#c04808','#b07006','#a81840','#5010a0','#087830'],
+    hueShift: -10, satMod: 1.25, litMod: 0.85,
+    swatches: ['#b01808','#c04808','#b07006','#a81840','#5010a0','#087830'],
   },
 };
 
-const STYLE_NAMES = {watercolor:'Watercolor',oil:'Oil',inkwash:'Ink Wash',splatter:'Splatter',neon:'Neon'};
+const STYLE_NAMES = {watercolor:'Watercolor', oil:'Oil', inkwash:'Ink Wash', splatter:'Splatter', neon:'Neon'};
 
 // ══════════════════════════════════════════════════════════════════
-//  STROKE STORE
-//  Every mark is stored as an object. Deleted strokes are marked
-//  dimmed=true and permanently rendered at low opacity — they stay
-//  visible as a ghost, they just lose their colour strength.
+//  COLOUR RESOLVER
+//  Takes a raw key, returns [h, s, l] adjusted for current palette.
 // ══════════════════════════════════════════════════════════════════
-const DIMMED_OPACITY = 0.13; // ghost opacity — visible but washed out
-let strokeStack = []; // all strokes, in order, { ...data, dimmed: bool }
+function resolveColour(key) {
+  const k = key.toLowerCase();
+  let base = KEY_HUES[key] || KEY_HUES[k];
+
+  // Try Korean mapping if no direct match
+  if (!base) {
+    const koChar = QWERTY_TO_KO[k];
+    if (koChar && KO_HUES[koChar]) base = KO_HUES[koChar];
+  }
+
+  // Fallback for anything truly unknown
+  if (!base) {
+    let hash = 0;
+    for (let i = 0; i < key.length; i++) hash = (hash * 31 + key.charCodeAt(i)) >>> 0;
+    base = [hash % 360, 65, 50];
+  }
+
+  const pal = currentPalette;
+  const h = ((base[0] + pal.hueShift) % 360 + 360) % 360;
+  const s = Math.min(95, Math.max(20, base[1] * pal.satMod));
+  const l = Math.min(75, Math.max(30, base[2] * pal.litMod));
+  return [h, s, l];
+}
+
+// ══════════════════════════════════════════════════════════════════
+//  STROKE STORE — fully deterministic
+//  ALL randomness (position, size, angles, jitter) is generated
+//  ONCE at stroke creation and stored in the stroke object.
+//  redrawAll just replays stored data — no Math.random() ever.
+// ══════════════════════════════════════════════════════════════════
+const DIMMED_OPACITY = 0.12;
+let strokeStack = [];
 
 function redrawAll() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   strokeStack.forEach(s => {
     ctx.save();
     ctx.globalAlpha = s.dimmed ? DIMMED_OPACITY : 1;
-    drawStroke(s);
+    replayStroke(s);
     ctx.restore();
   });
-}
-
-// ══════════════════════════════════════════════════════════════════
-//  BAND & HUE HELPERS
-// ══════════════════════════════════════════════════════════════════
-function getBand(key) {
-  const k = key.toLowerCase();
-  const enIdx = EN_FREQ_RANK.indexOf(k);
-  if (enIdx !== -1) return Math.min(5, Math.floor(enIdx / 4.4));
-  if (key === ' ') return 0;
-  if ('.,'.includes(key)) return 1;
-  if ('!?-\'"'.includes(key)) return 2;
-  if ('()[]{}:;'.includes(key)) return 3;
-  const nIdx = '1234567890'.indexOf(key);
-  if (nIdx !== -1) return Math.min(5, 2 + Math.floor(nIdx / 2));
-  if ('@#$%^&*+=<>/\\|`~'.includes(key)) return 5;
-  const koChar = QWERTY_TO_KO[k];
-  if (koChar) {
-    const cIdx = KO_CONS_RANK.indexOf(koChar);
-    if (cIdx !== -1) return Math.min(5, Math.floor(cIdx / 3));
-    const vIdx = KO_VOWEL_RANK.indexOf(koChar);
-    if (vIdx !== -1) return Math.min(5, Math.floor(vIdx / 2.5));
-  }
-  return 4;
-}
-
-function getHueNudge(key) {
-  let h = 0;
-  for (let i=0;i<key.length;i++) h=(h*31+key.charCodeAt(i))>>>0;
-  return (h%40)-20;
 }
 
 // ══════════════════════════════════════════════════════════════════
@@ -336,7 +437,7 @@ let currentPalette  = PALETTES.beach;
 let canvas, ctx;
 let sessionCounts   = {};
 let totalKeystrokes = 0;
-let prevTextLength  = 0; // track textarea length to detect deletes
+let prevTextLength  = 0;
 
 // ══════════════════════════════════════════════════════════════════
 //  SETUP UI
@@ -345,51 +446,55 @@ function drawStylePreview(cv, style) {
   const c = cv.getContext('2d');
   const w = cv.width, h = cv.height;
   c.clearRect(0,0,w,h);
-  // light bg
-  c.fillStyle = '#f5f2ec';
-  c.fillRect(0,0,w,h);
-  const cols = ['#4ab8cc','#d4a84a','#d87098','#3848aa','#b01808'];
+  c.fillStyle = '#f5f2ec'; c.fillRect(0,0,w,h);
+  const cols = ['#4ab8cc','#d4a84a','#d87098','#3848aa','#b01808','#38a890','#270070'];
 
   if (style==='watercolor') {
-    [[.25,.4,38],[.6,.5,32],[.5,.22,26],[.35,.72,30]].forEach(([x,y,r],i)=>{
+    [[.22,.38,36],[.58,.52,30],[.48,.22,24],[.72,.68,28],[.35,.75,22]].forEach(([x,y,r],i)=>{
       const g=c.createRadialGradient(x*w,y*h,0,x*w,y*h,r);
-      g.addColorStop(0,cols[i%cols.length]+'66'); g.addColorStop(1,cols[i%cols.length]+'00');
-      c.fillStyle=g; c.beginPath(); c.arc(x*w,y*h,r,0,Math.PI*2); c.fill();
+      g.addColorStop(0,cols[i%cols.length]+'70'); g.addColorStop(1,cols[i%cols.length]+'00');
+      c.fillStyle=g; c.beginPath(); c.ellipse(x*w,y*h,r,r*.8,i*.4,0,Math.PI*2); c.fill();
     });
   } else if (style==='oil') {
-    [[.1,.5,.7,.45],[.2,.2,.8,.6],[.05,.65,.55,.82]].forEach(([x1,y1,x2,y2],i)=>{
+    [[.08,.5,.68,.42],[.18,.18,.82,.62],[.04,.68,.58,.85],[.3,.1,.75,.55]].forEach(([x1,y1,x2,y2],i)=>{
       const g=c.createLinearGradient(x1*w,y1*h,x2*w,y2*h);
-      g.addColorStop(0,cols[i]+'00'); g.addColorStop(.15,cols[i]+'dd');
-      g.addColorStop(.85,cols[(i+1)%cols.length]+'dd'); g.addColorStop(1,cols[(i+1)%cols.length]+'00');
-      c.strokeStyle=g; c.lineWidth=9; c.lineCap='round';
-      c.beginPath(); c.moveTo(x1*w,y1*h); c.quadraticCurveTo((x1+x2)/2*w,(y1+y2)/2*h+12,x2*w,y2*h); c.stroke();
+      g.addColorStop(0,cols[i]+'00'); g.addColorStop(.12,cols[i]+'ee');
+      g.addColorStop(.88,cols[(i+2)%cols.length]+'ee'); g.addColorStop(1,cols[(i+2)%cols.length]+'00');
+      c.strokeStyle=g; c.lineWidth=8+(i%3)*3; c.lineCap='round';
+      c.beginPath(); c.moveTo(x1*w,y1*h); c.quadraticCurveTo((x1+x2)/2*w+10,(y1+y2)/2*h+10,x2*w,y2*h); c.stroke();
     });
   } else if (style==='inkwash') {
-    [[.2,.4,34,28],[.6,.55,38,24],[.45,.25,26,20]].forEach(([x,y,rx,ry],i)=>{
+    [[.18,.38,32,26],[.58,.58,36,22],[.42,.22,24,18],[.7,.7,28,20]].forEach(([x,y,rx,ry],i)=>{
       c.save(); c.translate(x*w,y*h); c.scale(1,ry/rx);
       const g=c.createRadialGradient(0,0,0,0,0,rx);
-      g.addColorStop(0,'rgba(60,90,140,0.45)'); g.addColorStop(1,'rgba(60,90,140,0)');
+      g.addColorStop(0,cols[i%3+2]+'88'); g.addColorStop(1,cols[i%3+2]+'00');
       c.fillStyle=g; c.beginPath(); c.arc(0,0,rx,0,Math.PI*2); c.fill(); c.restore();
     });
-    c.strokeStyle='rgba(50,70,120,0.4)'; c.lineWidth=1; c.lineCap='round';
-    [[.1,.2,.7,.5],[.2,.6,.8,.4]].forEach(([x1,y1,x2,y2])=>{
-      c.beginPath(); c.moveTo(x1*w,y1*h); c.bezierCurveTo(x1*w+18,y1*h+12,x2*w-15,y2*h-8,x2*w,y2*h); c.stroke();
+    c.strokeStyle='rgba(40,60,110,0.45)'; c.lineCap='round';
+    [[.08,.15,.72,.52],[.18,.62,.82,.42],[.3,.05,.65,.78]].forEach(([x1,y1,x2,y2],i)=>{
+      c.lineWidth=.8+i*.4;
+      c.beginPath(); c.moveTo(x1*w,y1*h); c.bezierCurveTo(x1*w+20,y1*h+15,x2*w-15,y2*h-10,x2*w,y2*h); c.stroke();
     });
   } else if (style==='splatter') {
-    for(let i=0;i<55;i++){
-      const x=Math.random()*w,y=Math.random()*h,r=1+Math.random()*6;
-      c.fillStyle=cols[Math.floor(Math.random()*cols.length)]+(Math.random()>.5?'bb':'77');
+    // seeded so preview is stable
+    let sx=0.5,sy=0.3;
+    function sr(){sx=(sx*9301+49297)%233280/233280;return sx;}
+    for(let i=0;i<70;i++){
+      const x=sr()*w,y=sr()*h,r=.8+sr()*7;
+      c.fillStyle=cols[Math.floor(sr()*cols.length)]+(r>4?'cc':'88');
       c.beginPath(); c.arc(x,y,r,0,Math.PI*2); c.fill();
+      if(r>5){const ang=sr()*Math.PI*2,len=5+sr()*25; c.strokeStyle=cols[Math.floor(sr()*cols.length)]+'55'; c.lineWidth=.8; c.beginPath(); c.moveTo(x,y); c.lineTo(x+Math.cos(ang)*len,y+Math.sin(ang)*len); c.stroke();}
     }
   } else if (style==='neon') {
-    c.fillStyle='#0f0f18'; c.fillRect(0,0,w,h);
-    [[.2,.4,28,180],[.55,.28,22,300],[.72,.62,20,55]].forEach(([x,y,r,hue])=>{
+    c.fillStyle='#10101a'; c.fillRect(0,0,w,h);
+    [[.2,.42,26,180],[.52,.28,20,300],[.74,.62,18,55],[.38,.72,16,130]].forEach(([x,y,r,hue])=>{
       for(let p=2;p>=0;p--){
-        const g=c.createRadialGradient(x*w,y*h,0,x*w,y*h,r*(1+p*.7));
-        g.addColorStop(0,`hsla(${hue},100%,68%,${.65-p*.18})`);
+        const g=c.createRadialGradient(x*w,y*h,0,x*w,y*h,r*(1+p*.8));
+        g.addColorStop(0,`hsla(${hue},100%,68%,${.6-p*.16})`);
         g.addColorStop(1,`hsla(${hue},100%,50%,0)`);
-        c.fillStyle=g; c.beginPath(); c.arc(x*w,y*h,r*(1+p*.7),0,Math.PI*2); c.fill();
+        c.fillStyle=g; c.beginPath(); c.arc(x*w,y*h,r*(1+p*.8),0,Math.PI*2); c.fill();
       }
+      c.fillStyle=`hsla(${hue},100%,92%,0.85)`; c.beginPath(); c.arc(x*w,y*h,2,0,Math.PI*2); c.fill();
     });
   }
 }
@@ -398,30 +503,30 @@ function buildSetup() {
   const sg = document.getElementById('styleGrid');
   Object.keys(STYLE_NAMES).forEach(id => {
     const btn = document.createElement('div');
-    btn.className='style-btn'+(id===selectedStyle?' active':'');
-    const cv=document.createElement('canvas'); cv.width=160; cv.height=100;
-    const lbl=document.createElement('span'); lbl.textContent=STYLE_NAMES[id];
+    btn.className = 'style-btn' + (id===selectedStyle?' active':'');
+    const cv = document.createElement('canvas'); cv.width=160; cv.height=100;
+    const lbl = document.createElement('span'); lbl.textContent = STYLE_NAMES[id];
     btn.appendChild(cv); btn.appendChild(lbl);
-    btn.addEventListener('click',()=>{
+    btn.addEventListener('click', () => {
       document.querySelectorAll('.style-btn').forEach(b=>b.classList.remove('active'));
-      btn.classList.add('active'); selectedStyle=id;
+      btn.classList.add('active'); selectedStyle = id;
     });
     sg.appendChild(btn);
-    requestAnimationFrame(()=>drawStylePreview(cv,id));
+    requestAnimationFrame(() => drawStylePreview(cv, id));
   });
 
   const pg = document.getElementById('paletteGrid');
-  Object.entries(PALETTES).forEach(([id,pal])=>{
-    const btn=document.createElement('div');
-    btn.className='palette-btn'+(id===selectedPalette?' active':'');
-    const sw=document.createElement('div'); sw.className='palette-swatches';
-    pal.swatches.forEach(c=>{
-      const s=document.createElement('div'); s.className='swatch'; s.style.background=c; sw.appendChild(s);
+  Object.entries(PALETTES).forEach(([id, pal]) => {
+    const btn = document.createElement('div');
+    btn.className = 'palette-btn' + (id===selectedPalette?' active':'');
+    const sw = document.createElement('div'); sw.className = 'palette-swatches';
+    pal.swatches.forEach(c => {
+      const s = document.createElement('div'); s.className='swatch'; s.style.background=c; sw.appendChild(s);
     });
-    const nm=document.createElement('div'); nm.className='palette-name';
-    nm.textContent=pal.emoji+' '+pal.name;
+    const nm = document.createElement('div'); nm.className='palette-name';
+    nm.textContent = pal.emoji + ' ' + pal.name;
     btn.appendChild(sw); btn.appendChild(nm);
-    btn.addEventListener('click',()=>{
+    btn.addEventListener('click', () => {
       document.querySelectorAll('.palette-btn').forEach(b=>b.classList.remove('active'));
       btn.classList.add('active'); selectedPalette=id;
     });
@@ -440,22 +545,21 @@ function startApp() {
   document.getElementById('app').classList.add('visible');
 
   const now = new Date();
-  const dateStr = now.toLocaleDateString('en-GB',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
-  document.getElementById('dateDisplay').textContent = dateStr;
+  const ds = now.toLocaleDateString('en-GB',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  document.getElementById('dateDisplay').textContent = ds;
   document.getElementById('modePill').textContent = STYLE_NAMES[selectedStyle]+' · '+currentPalette.emoji+' '+currentPalette.name;
-  document.getElementById('topCenter').textContent = dateStr;
+  document.getElementById('topCenter').textContent = ds;
 
   canvas = document.getElementById('painting');
   resizeCanvas();
-  window.addEventListener('resize', ()=>{resizeCanvas(); redrawAll();});
+  window.addEventListener('resize', () => { resizeCanvas(); redrawAll(); });
 
-  const journal = document.getElementById('journal');
-  journal.addEventListener('keydown', onKey);
-  // Also watch input event to catch paste-deletes, autocorrect, etc.
-  journal.addEventListener('input', onInput);
+  const j = document.getElementById('journal');
+  j.addEventListener('keydown', onKey);
+  j.addEventListener('input', onInput);
   document.getElementById('exportBtn').addEventListener('click', exportPNG);
   document.getElementById('clearBtn').addEventListener('click', clearAll);
-  journal.focus();
+  j.focus();
 }
 
 function resizeCanvas() {
@@ -466,62 +570,51 @@ function resizeCanvas() {
 }
 
 // ══════════════════════════════════════════════════════════════════
-//  INPUT HANDLERS
+//  KEY HANDLER
 // ══════════════════════════════════════════════════════════════════
-const SPLASH_KEYS = new Set([' ','.',',','!','?','Enter','。','，','！','？']);
-const IGNORE_KEYS = new Set(['Shift','Control','Alt','Meta','ArrowUp','ArrowDown',
+const SPLASH_KEYS  = new Set([' ','.',',','!','?','\n','Enter','。','，','！','？']);
+const IGNORE_KEYS  = new Set(['Shift','Control','Alt','Meta','ArrowUp','ArrowDown',
   'ArrowLeft','ArrowRight','Home','End','PageUp','PageDown','Tab','Escape',
   'CapsLock','Insert','F1','F2','F3','F4','F5','F6','F7','F8','F9','F10','F11','F12']);
-const DELETE_KEYS = new Set(['Backspace','Delete']);
+const DELETE_KEYS  = new Set(['Backspace','Delete']);
 
 function onKey(e) {
-  if (IGNORE_KEYS.has(e.key)) return;
+  if (IGNORE_KEYS.has(e.key) || DELETE_KEYS.has(e.key)) return;
 
-  if (DELETE_KEYS.has(e.key)) {
-    // Will handle in onInput after text is actually removed
-    return;
-  }
-
-  const key = e.key;
+  const key = e.key === 'Enter' ? '\n' : e.key;
   sessionCounts[key] = (sessionCounts[key]||0) + 1;
   totalKeystrokes++;
 
-  const band    = getBand(key);
-  const bandDef = currentPalette.bands[band];
-  const hue     = ((bandDef.h + getHueNudge(key)) % 360 + 360) % 360;
+  const [h, s, l] = resolveColour(key);
+  // Session frequency boost: more presses → slightly richer saturation
   const freq    = sessionCounts[key];
-  const satMod  = Math.min(1, 0.6 + freq * 0.015);
-  const sat     = Math.round(bandDef.s * satMod);
-  const lit     = bandDef.l;
+  const satBoost = Math.min(10, freq * 0.4);
   const isSplash = SPLASH_KEYS.has(key);
 
-  addStroke({
-    x: Math.random() * canvas.width,
-    y: Math.random() * canvas.height,
-    hue, sat, lit, isSplash, band,
-    style: selectedStyle,
-  });
+  // ── Generate ALL randomness now, store it ──
+  const W = canvas.width, H = canvas.height;
+  const x = Math.random() * W;
+  const y = Math.random() * H;
+
+  // Pre-generate random seeds for each style's needs
+  const rands = Array.from({length: 20}, () => Math.random());
+
+  addStroke({ key, h, s: s + satBoost, l, isSplash, x, y, rands, dimmed: false });
 
   updateStats();
   if (isSplash) flashSplash();
 }
 
-// Detects net character removal (backspace, delete, select+delete, paste-over)
-function onInput(e) {
-  const journal = document.getElementById('journal');
-  const newLen  = journal.value.length;
+function onInput() {
+  const j = document.getElementById('journal');
+  const newLen = j.value.length;
   const removed = prevTextLength - newLen;
-
-  if (removed > 0) {
-    triggerDim(removed);
-  }
-
+  if (removed > 0) triggerDim(removed);
   prevTextLength = newLen;
   updateStats();
 }
 
 function triggerDim(count) {
-  // Mark the most recent 'count' un-dimmed strokes as dimmed
   let dimmed = 0;
   for (let i = strokeStack.length - 1; i >= 0 && dimmed < count; i--) {
     if (!strokeStack[i].dimmed) { strokeStack[i].dimmed = true; dimmed++; }
@@ -533,173 +626,165 @@ function triggerDim(count) {
 //  STROKE MANAGEMENT
 // ══════════════════════════════════════════════════════════════════
 function addStroke(s) {
-  s.dimmed = false;
   strokeStack.push(s);
-  // Draw directly onto canvas (fast path — no need for full redraw on every keystroke)
   ctx.save();
   ctx.globalAlpha = 1;
-  drawStroke(s);
+  replayStroke(s);
   ctx.restore();
 }
 
-function drawStroke(s) {
-  const {x, y, hue, sat, lit, isSplash, band, style} = s;
-  if (style==='watercolor') drawWatercolor(x,y,hue,sat,lit,isSplash,band);
-  else if (style==='oil')   drawOil(x,y,hue,sat,lit,isSplash,band);
-  else if (style==='inkwash') drawInkwash(x,y,hue,sat,lit,isSplash,band);
-  else if (style==='splatter') drawSplatter(x,y,hue,sat,lit,isSplash);
-  else if (style==='neon')  drawNeon(x,y,hue,sat,lit,isSplash,band);
-}
+// replayStroke uses ONLY s.rands[] for randomness — fully deterministic
+function replayStroke(s) {
+  const {h, s: sat, l, isSplash, x, y, rands} = s;
+  const r = rands; // shorthand
+  const style = selectedStyle;
 
-// ── Watercolor ──
-function drawWatercolor(x,y,hue,sat,lit,isSplash,band) {
-  const baseR = isSplash ? 55+Math.random()*45 : 14+band*5+Math.random()*16;
-  ctx.globalCompositeOperation='source-over';
-  for(let ring=3;ring>=0;ring--){
-    const r=baseR*(1+ring*0.28);
-    const alpha=isSplash?(0.11-ring*0.022):(0.09-ring*0.018);
-    const grd=ctx.createRadialGradient(x,y,0,x+ring*3,y+ring*2,r);
-    grd.addColorStop(0,`hsla(${hue},${sat}%,${lit}%,${alpha})`);
-    grd.addColorStop(0.5,`hsla(${hue},${sat-5}%,${lit-3}%,${alpha*0.5})`);
-    grd.addColorStop(1,`hsla(${hue},${sat}%,${lit}%,0)`);
-    ctx.fillStyle=grd;
-    ctx.beginPath();
-    ctx.ellipse(x+ring*2,y+ring,r,r*(0.72+Math.random()*0.28),Math.random()*Math.PI,0,Math.PI*2);
-    ctx.fill();
-  }
-}
+  ctx.globalCompositeOperation = 'source-over';
 
-// ── Oil ──
-function drawOil(x,y,hue,sat,lit,isSplash,band) {
-  const len=isSplash?110+Math.random()*80:35+band*8+Math.random()*35;
-  const wid=isSplash?16+Math.random()*12:5+band*2+Math.random()*7;
-  const angle=Math.random()*Math.PI*2;
-  const x2=x+Math.cos(angle)*len, y2=y+Math.sin(angle)*len;
-  const mx=(x+x2)/2+Math.sin(angle+1)*(len*0.18);
-  const my=(y+y2)/2+Math.cos(angle+1)*(len*0.14);
-  ctx.globalCompositeOperation='source-over';
-  const grd=ctx.createLinearGradient(x,y,x2,y2);
-  grd.addColorStop(0,`hsla(${hue},${sat}%,${lit}%,0)`);
-  grd.addColorStop(.12,`hsla(${hue},${sat}%,${lit}%,0.92)`);
-  grd.addColorStop(.88,`hsla(${(hue+15)%360},${sat}%,${lit-3}%,0.92)`);
-  grd.addColorStop(1,`hsla(${(hue+15)%360},${sat}%,${lit}%,0)`);
-  ctx.strokeStyle=grd; ctx.lineWidth=wid; ctx.lineCap='round';
-  ctx.beginPath(); ctx.moveTo(x,y); ctx.quadraticCurveTo(mx,my,x2,y2); ctx.stroke();
-  ctx.strokeStyle=`hsla(${hue},${sat-20}%,${lit+20}%,0.18)`;
-  ctx.lineWidth=2;
-  ctx.beginPath(); ctx.moveTo(x,y-2); ctx.quadraticCurveTo(mx,my-2,x2,y2-2); ctx.stroke();
-}
-
-// ── Ink Wash ──
-function drawInkwash(x,y,hue,sat,lit,isSplash,band) {
-  ctx.globalCompositeOperation='source-over';
-  if(isSplash){
-    const r=65+Math.random()*55;
-    const grd=ctx.createRadialGradient(x,y,0,x,y,r);
-    grd.addColorStop(0,`hsla(${hue},${sat*0.5}%,${lit*0.65}%,0.16)`);
-    grd.addColorStop(1,`hsla(${hue},${sat*0.5}%,${lit*0.65}%,0)`);
-    ctx.fillStyle=grd; ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
-  }
-  const len2=18+band*5+Math.random()*28;
-  const ang2=Math.random()*Math.PI*2;
-  ctx.strokeStyle=`hsla(${hue},${sat*0.55}%,${lit*0.55}%,${isSplash?0.65:0.38})`;
-  ctx.lineWidth=0.7+Math.random()*1.4; ctx.lineCap='round';
-  ctx.beginPath(); ctx.moveTo(x,y);
-  ctx.lineTo(x+Math.cos(ang2)*len2,y+Math.sin(ang2)*len2); ctx.stroke();
-}
-
-// ── Splatter ──
-function drawSplatter(x,y,hue,sat,lit,isSplash) {
-  ctx.globalCompositeOperation='source-over';
-  const count=isSplash?10+Math.floor(Math.random()*10):1;
-  for(let i=0;i<count;i++){
-    const dx=isSplash?(Math.random()-.5)*110:0;
-    const dy=isSplash?(Math.random()-.5)*110:0;
-    const r=isSplash?2+Math.random()*13:2+Math.random()*8;
-    ctx.fillStyle=`hsla(${hue},${sat}%,${lit}%,${0.5+Math.random()*0.5})`;
-    ctx.beginPath(); ctx.arc(x+dx,y+dy,r,0,Math.PI*2); ctx.fill();
-    if(r>6&&isSplash){
-      const sLen=8+Math.random()*32, sAng=Math.random()*Math.PI*2;
-      ctx.strokeStyle=`hsla(${hue},${sat}%,${lit}%,0.28)`;
-      ctx.lineWidth=1+Math.random();
-      ctx.beginPath(); ctx.moveTo(x+dx,y+dy);
-      ctx.lineTo(x+dx+Math.cos(sAng)*sLen,y+dy+Math.sin(sAng)*sLen); ctx.stroke();
+  if (style === 'watercolor') {
+    const baseR = isSplash ? 55 + r[0]*45 : 12 + r[0]*22;
+    for (let ring = 3; ring >= 0; ring--) {
+      const radius = baseR * (1 + ring*0.3);
+      const alpha  = isSplash ? (0.13 - ring*0.026) : (0.10 - ring*0.02);
+      const grd = ctx.createRadialGradient(
+        x + ring*r[ring+1]*6, y + ring*r[ring+2]*5,  0,
+        x + ring*r[ring+1]*4, y + ring*r[ring+2]*3, radius
+      );
+      grd.addColorStop(0,   `hsla(${h},${sat}%,${l}%,${alpha})`);
+      grd.addColorStop(0.55,`hsla(${h},${sat-4}%,${l-2}%,${alpha*0.45})`);
+      grd.addColorStop(1,   `hsla(${h},${sat}%,${l}%,0)`);
+      ctx.fillStyle = grd;
+      ctx.beginPath();
+      ctx.ellipse(
+        x + ring*r[ring+3]*5, y + ring*r[ring+4]*4,
+        radius, radius*(0.65 + r[ring+5]*0.35),
+        r[ring+6]*Math.PI, 0, Math.PI*2
+      );
+      ctx.fill();
     }
-  }
-}
 
-// ── Neon ──
-function drawNeon(x,y,hue,sat,lit,isSplash,band) {
-  ctx.globalCompositeOperation='lighter';
-  const baseR=isSplash?50+Math.random()*40:10+band*4+Math.random()*14;
-  const passes=isSplash?4:3;
-  for(let p=passes;p>=0;p--){
-    const r=baseR*(1+p*0.5);
-    const grd=ctx.createRadialGradient(x,y,0,x,y,r);
-    grd.addColorStop(0,`hsla(${hue},100%,${lit}%,${isSplash?0.55-p*0.1:0.35-p*0.07})`);
-    grd.addColorStop(0.3,`hsla(${hue},100%,${lit-10}%,${0.12-p*0.02})`);
-    grd.addColorStop(1,`hsla(${hue},100%,${lit-20}%,0)`);
-    ctx.fillStyle=grd; ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
+  } else if (style === 'oil') {
+    const len   = isSplash ? 100 + r[0]*90 : 30 + r[0]*50;
+    const wid   = isSplash ? 14  + r[1]*14 :  4 + r[1]*10;
+    const angle = r[2] * Math.PI * 2;
+    const x2    = x + Math.cos(angle)*len;
+    const y2    = y + Math.sin(angle)*len;
+    const mx    = (x+x2)/2 + Math.sin(angle+1)*(len*(0.1+r[3]*0.15));
+    const my    = (y+y2)/2 + Math.cos(angle+1)*(len*(0.1+r[4]*0.12));
+    const hue2  = (h + 12 + r[5]*16) % 360;
+    const grd   = ctx.createLinearGradient(x,y,x2,y2);
+    grd.addColorStop(0,   `hsla(${h},${sat}%,${l}%,0)`);
+    grd.addColorStop(0.1, `hsla(${h},${sat}%,${l}%,0.93)`);
+    grd.addColorStop(0.9, `hsla(${hue2},${sat}%,${l-2}%,0.93)`);
+    grd.addColorStop(1,   `hsla(${hue2},${sat}%,${l}%,0)`);
+    ctx.strokeStyle = grd; ctx.lineWidth = wid; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(x,y); ctx.quadraticCurveTo(mx,my,x2,y2); ctx.stroke();
+    // subtle highlight
+    ctx.strokeStyle = `hsla(${h},${sat-15}%,${l+22}%,0.16)`;
+    ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(x,y-1.5); ctx.quadraticCurveTo(mx,my-1.5,x2,y2-1.5); ctx.stroke();
+
+  } else if (style === 'inkwash') {
+    if (isSplash) {
+      const wr = 60 + r[0]*55;
+      const grd = ctx.createRadialGradient(x,y,0,x,y,wr);
+      grd.addColorStop(0, `hsla(${h},${sat*0.5}%,${l*0.62}%,0.15)`);
+      grd.addColorStop(1, `hsla(${h},${sat*0.5}%,${l*0.62}%,0)`);
+      ctx.fillStyle = grd; ctx.beginPath(); ctx.arc(x,y,wr,0,Math.PI*2); ctx.fill();
+    }
+    const lineLen = 15 + r[1]*30;
+    const ang     = r[2] * Math.PI * 2;
+    ctx.strokeStyle = `hsla(${h},${sat*0.52}%,${l*0.52}%,${isSplash?0.65:0.40})`;
+    ctx.lineWidth   = 0.7 + r[3]*1.5;
+    ctx.lineCap     = 'round';
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(x + Math.cos(ang)*lineLen, y + Math.sin(ang)*lineLen);
+    ctx.stroke();
+
+  } else if (style === 'splatter') {
+    const count = isSplash ? 10 + Math.floor(r[0]*12) : 1;
+    for (let i = 0; i < count; i++) {
+      const ri  = i % 10;
+      const dx  = isSplash ? (r[ri]-0.5)*120 : 0;
+      const dy  = isSplash ? (r[ri+1 < 20 ? ri+1 : 0]-0.5)*120 : 0;
+      const rad = isSplash ? 1.5 + r[ri]*13 : 2 + r[0]*9;
+      ctx.fillStyle = `hsla(${h},${sat}%,${l}%,${0.5+r[ri]*0.5})`;
+      ctx.beginPath(); ctx.arc(x+dx, y+dy, rad, 0, Math.PI*2); ctx.fill();
+      if (rad > 6 && isSplash) {
+        const sAng = r[(ri+2)%20]*Math.PI*2;
+        const sLen = 8 + r[(ri+3)%20]*32;
+        ctx.strokeStyle = `hsla(${h},${sat}%,${l}%,0.25)`;
+        ctx.lineWidth   = 0.8 + r[(ri+4)%20];
+        ctx.beginPath(); ctx.moveTo(x+dx,y+dy);
+        ctx.lineTo(x+dx+Math.cos(sAng)*sLen, y+dy+Math.sin(sAng)*sLen); ctx.stroke();
+      }
+    }
+
+  } else if (style === 'neon') {
+    ctx.globalCompositeOperation = 'lighter';
+    const baseR = isSplash ? 48 + r[0]*42 : 9 + r[0]*14;
+    const passes = isSplash ? 4 : 3;
+    for (let p = passes; p >= 0; p--) {
+      const rad = baseR*(1+p*0.52);
+      const grd = ctx.createRadialGradient(x,y,0,x,y,rad);
+      grd.addColorStop(0,   `hsla(${h},100%,${l}%,${isSplash?0.52-p*0.09:0.34-p*0.07})`);
+      grd.addColorStop(0.3, `hsla(${h},100%,${l-8}%,${0.11-p*0.02})`);
+      grd.addColorStop(1,   `hsla(${h},100%,${l-18}%,0)`);
+      ctx.fillStyle = grd; ctx.beginPath(); ctx.arc(x,y,rad,0,Math.PI*2); ctx.fill();
+    }
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.fillStyle = `hsla(${h},100%,93%,${isSplash?0.9:0.65})`;
+    ctx.beginPath(); ctx.arc(x, y, isSplash?4:2, 0, Math.PI*2); ctx.fill();
   }
-  ctx.globalCompositeOperation='source-over';
-  ctx.fillStyle=`hsla(${hue},100%,92%,${isSplash?0.9:0.6})`;
-  ctx.beginPath(); ctx.arc(x,y,isSplash?4:2,0,Math.PI*2); ctx.fill();
 }
 
 // ══════════════════════════════════════════════════════════════════
 //  STATS & UI
 // ══════════════════════════════════════════════════════════════════
 function updateStats() {
-  document.getElementById('statKeys').textContent = totalKeystrokes.toLocaleString()+' keystrokes';
-  let topKey='', topCount=0;
-  Object.entries(sessionCounts).forEach(([k,v])=>{ if(v>topCount){topCount=v;topKey=k;} });
-  if(topKey){
-    const dk=topKey===' '?'Space':topKey;
-    document.getElementById('statTop').textContent=`Most used: ${dk} (×${topCount})`;
+  document.getElementById('statKeys').textContent = totalKeystrokes.toLocaleString() + ' keystrokes';
+  let topKey = '', topCount = 0;
+  Object.entries(sessionCounts).forEach(([k,v]) => { if(v>topCount){topCount=v;topKey=k;} });
+  if (topKey) {
+    const dk = topKey === ' ' ? 'Space' : topKey === '\n' ? 'Enter' : topKey;
+    document.getElementById('statTop').textContent = `Most used: ${dk} (×${topCount})`;
   }
-  const text=document.getElementById('journal').value;
-  const wc=text.trim()?text.trim().split(/\s+/).length:0;
-  document.getElementById('wcDisplay').textContent=wc+(wc===1?' word':' words');
+  const text = document.getElementById('journal').value;
+  const wc = text.trim() ? text.trim().split(/\s+/).length : 0;
+  document.getElementById('wcDisplay').textContent = wc + (wc===1?' word':' words');
 }
 
 function flashSplash() {
-  const dot=document.getElementById('splashDot');
+  const dot = document.getElementById('splashDot');
   dot.classList.add('flash');
-  setTimeout(()=>dot.classList.remove('flash'),120);
+  setTimeout(() => dot.classList.remove('flash'), 120);
 }
 
 function clearAll() {
   if (!confirm("Clear today's painting and text?")) return;
   strokeStack = [];
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  sessionCounts = {};
-  totalKeystrokes = 0;
+  sessionCounts = {}; totalKeystrokes = 0;
   document.getElementById('journal').value = '';
   prevTextLength = 0;
   updateStats();
 }
 
 function exportPNG() {
-  const exportCanvas = document.createElement('canvas');
-  exportCanvas.width  = canvas.width;
-  exportCanvas.height = canvas.height;
-  const ectx = exportCanvas.getContext('2d');
+  const ec = document.createElement('canvas');
+  ec.width = canvas.width; ec.height = canvas.height;
+  const ectx = ec.getContext('2d');
   ectx.fillStyle = '#f5f2ec';
-  ectx.fillRect(0, 0, exportCanvas.width, exportCanvas.height);
+  ectx.fillRect(0, 0, ec.width, ec.height);
   ectx.drawImage(canvas, 0, 0);
-
-  const now = new Date();
-  const dateStr = now.toISOString().slice(0, 10);
-  const palName = currentPalette.name.toLowerCase();
-  const filename = `chroma-journal-${dateStr}-${palName}.png`;
-
-  exportCanvas.toBlob(blob => {
-    const url = URL.createObjectURL(blob);
+  const dateStr  = new Date().toISOString().slice(0,10);
+  const palName  = currentPalette.name.toLowerCase();
+  ec.toBlob(blob => {
+    const url  = URL.createObjectURL(blob);
     const link = document.createElement('a');
-    link.href = url;
-    link.download = filename;
-    document.body.appendChild(link);
-    link.click();
+    link.href = url; link.download = `chroma-journal-${dateStr}-${palName}.png`;
+    document.body.appendChild(link); link.click();
     document.body.removeChild(link);
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }, 'image/png');
