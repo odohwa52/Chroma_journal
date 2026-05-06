@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Chroma Journal</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Azeret+Mono:wght@300;400&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg: #faf8f4;
+  --panel-l: #f5f2ec;
+  --panel-r: #fdfbf8;
+  --border: rgba(0,0,0,0.08);
+  --border-mid: rgba(0,0,0,0.05);
+  --text: #1a1814;
+  --muted: rgba(26,24,20,0.42);
+  --accent: #9b6e3a;
+  --accent-light: rgba(155,110,58,0.10);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { height:100%; overflow:hidden; background:var(--bg); color:var(--text); font-family:'Azeret Mono', monospace; }
+
+/* ── SETUP ── */
+#setup {
+  position:fixed; inset:0; z-index:100;
+  background:var(--bg);
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  padding:40px 24px;
+  overflow-y:auto;
+}
+#setup.hidden { display:none; }
+
+.setup-title {
+  font-family:'Cormorant Garamond', serif;
+  font-size:clamp(34px,5vw,54px);
+  font-weight:300; letter-spacing:-0.5px;
+  color:var(--text); text-align:center;
+  margin-bottom:6px;
+}
+.setup-sub {
+  font-size:10px; letter-spacing:2.5px; color:var(--muted);
+  text-transform:uppercase; text-align:center; margin-bottom:48px;
+}
+.setup-section { width:100%; max-width:800px; margin-bottom:36px; }
+.setup-label {
+  font-size:9px; letter-spacing:3px; text-transform:uppercase;
+  color:var(--accent); margin-bottom:14px;
+}
+
+.style-grid {
+  display:grid; grid-template-columns:repeat(5,1fr); gap:10px;
+}
+.style-btn {
+  background:#fff; border:1px solid var(--border); border-radius:6px;
+  cursor:pointer; padding:0; overflow:hidden;
+  transition:border-color 200ms, transform 150ms, box-shadow 200ms;
+  display:flex; flex-direction:column;
+  box-shadow:0 1px 4px rgba(0,0,0,0.04);
+}
+.style-btn:hover { border-color:rgba(0,0,0,0.2); transform:translateY(-2px); box-shadow:0 4px 12px rgba(0,0,0,0.08); }
+.style-btn.active { border-color:var(--accent); box-shadow:0 0 0 2px var(--accent-light); }
+.style-btn canvas { width:100%; display:block; }
+.style-btn span {
+  display:block; font-size:9px; letter-spacing:1.5px; text-transform:uppercase;
+  color:var(--muted); text-align:center; padding:8px 4px 9px;
+  border-top:1px solid var(--border);
+}
+.style-btn.active span { color:var(--accent); }
+
+.palette-grid {
+  display:grid; grid-template-columns:repeat(5,1fr); gap:10px;
+}
+.palette-btn {
+  background:#fff; border:1px solid var(--border); border-radius:6px;
+  cursor:pointer; padding:14px 10px 12px;
+  transition:border-color 200ms, transform 150ms, box-shadow 200ms;
+  display:flex; flex-direction:column; align-items:center; gap:10px;
+  box-shadow:0 1px 4px rgba(0,0,0,0.04);
+}
+.palette-btn:hover { border-color:rgba(0,0,0,0.2); transform:translateY(-2px); box-shadow:0 4px 12px rgba(0,0,0,0.08); }
+.palette-btn.active { border-color:var(--accent); box-shadow:0 0 0 2px var(--accent-light); }
+.palette-swatches { display:flex; gap:4px; flex-wrap:wrap; justify-content:center; }
+.swatch { width:14px; height:14px; border-radius:50%; }
+.palette-name { font-size:9px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); }
+.palette-btn.active .palette-name { color:var(--accent); }
+
+.start-btn {
+  background:var(--accent); color:#fff;
+  border:none; border-radius:4px; padding:14px 52px;
+  font-family:'Azeret Mono', monospace;
+  font-size:11px; letter-spacing:3px; text-transform:uppercase;
+  cursor:pointer; margin-top:8px;
+  transition:opacity 200ms, transform 150ms;
+  box-shadow:0 2px 12px rgba(155,110,58,0.25);
+}
+.start-btn:hover { opacity:0.88; transform:translateY(-1px); }
+
+/* ── APP ── */
+#app { display:none; height:100vh; flex-direction:column; }
+#app.visible { display:flex; }
+
+#topbar {
+  height:46px; min-height:46px;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 20px;
+  border-bottom:1px solid var(--border);
+  background:var(--bg);
+  z-index:10;
+}
+.topbar-left {
+  font-family:'Cormorant Garamond', serif;
+  font-size:18px; font-weight:300; font-style:italic;
+  color:var(--text); letter-spacing:0.5px;
+}
+.topbar-center { font-size:10px; letter-spacing:2px; color:var(--muted); text-transform:uppercase; }
+.topbar-right { display:flex; align-items:center; gap:10px; }
+.top-btn {
+  background:none; border:1px solid var(--border); border-radius:3px;
+  color:var(--muted); font-family:'Azeret Mono',monospace;
+  font-size:9px; letter-spacing:2px; text-transform:uppercase;
+  padding:5px 10px; cursor:pointer;
+  transition:border-color 150ms, color 150ms;
+}
+.top-btn:hover { border-color:var(--accent); color:var(--accent); }
+.top-btn.primary { border-color:var(--accent); color:var(--accent); }
+
+#split { flex:1; display:flex; overflow:hidden; }
+
+#canvas-panel {
+  flex:1; position:relative; background:var(--panel-l);
+  border-right:1px solid var(--border);
+  overflow:hidden;
+}
+#painting { position:absolute; inset:0; display:block; }
+
+#stats {
+  position:absolute; bottom:16px; left:16px;
+  display:flex; flex-direction:column; gap:4px;
+  pointer-events:none;
+}
+.stat { font-size:9px; letter-spacing:1.5px; color:rgba(0,0,0,0.22); text-transform:uppercase; }
+
+
+#write-panel {
+  width:42%; min-width:320px; max-width:560px;
+  display:flex; flex-direction:column;
+  background:var(--panel-r);
+}
+#write-header {
+  padding:16px 24px 12px;
+  border-bottom:1px solid var(--border);
+  display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;
+}
+.date-display {
+  font-family:'Cormorant Garamond',serif;
+  font-size:15px; font-weight:300; color:var(--muted); letter-spacing:0.5px;
+}
+.mode-pill {
+  font-size:8px; letter-spacing:2px; color:var(--accent);
+  text-transform:uppercase; border:1px solid rgba(155,110,58,0.3);
+  padding:2px 7px; border-radius:20px;
+}
+
+#journal {
+  flex:1; resize:none; border:none; outline:none;
+  background:transparent; color:var(--text);
+  font-family:'Cormorant Garamond',serif;
+  font-size:18px; line-height:1.9; font-weight:300;
+  padding:28px 28px 28px 24px;
+  caret-color:var(--accent);
+  overflow-y:auto;
+}
+#journal::placeholder { color:rgba(26,24,20,0.2); font-style:italic; }
+
+#write-footer {
+  padding:10px 20px;
+  border-top:1px solid var(--border);
+  display:flex; align-items:center; justify-content:space-between;
+}
+.wc { font-size:9px; letter-spacing:1.5px; color:var(--muted); text-transform:uppercase; }
+.splash-indicator {
+  width:6px; height:6px; border-radius:50%;
+  background:var(--accent); opacity:0; transition:opacity 80ms;
+}
+.splash-indicator.flash { opacity:1; }
+</style>
+</head>
+<body>
+
+<!-- SETUP -->
+<div id="setup">
+  <div class="setup-title">Chroma Journal</div>
+  <div class="setup-sub">Set the mood before you write</div>
+  <div class="setup-section">
+    <div class="setup-label">Painting Style</div>
+    <div class="style-grid" id="styleGrid"></div>
+  </div>
+  <div class="setup-section">
+    <div class="setup-label">Colour Palette</div>
+    <div class="palette-grid" id="paletteGrid"></div>
+  </div>
+  <button class="start-btn" id="startBtn">Begin Today's Entry →</button>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div id="topbar">
+    <div class="topbar-left">Chroma Journal</div>
+    <div class="topbar-center" id="topCenter">—</div>
+    <div class="topbar-right">
+      <button class="top-btn" id="clearBtn">Clear</button>
+      <button class="top-btn primary" id="exportBtn">Export PNG</button>
+    </div>
+  </div>
+  <div id="split">
+    <div id="canvas-panel">
+      <canvas id="painting"></canvas>
+      <div id="stats">
+        <div class="stat" id="statKeys">0 keystrokes</div>
+        <div class="stat" id="statTop">—</div>
+      </div>
+    </div>
+    <div id="write-panel">
+      <div id="write-header">
+        <div class="date-display" id="dateDisplay">—</div>
+        <div class="mode-pill" id="modePill">—</div>
+      </div>
+      <textarea id="journal" placeholder="Start writing. The canvas listens.&#10;&#10;Switch between English and Korean freely — every keystroke leaves its colour."></textarea>
+      <div id="write-footer">
+        <div class="wc" id="wcDisplay">0 words</div>
+        <div class="splash-indicator" id="splashDot"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════════════
+//  FREQUENCY & PALETTE DATA
+// ══════════════════════════════════════════════════════════════════
+const EN_FREQ_RANK   = 'etaoinshrdlcumwfgypbvkjxqz';
+const KO_CONS_RANK   = 'ㅇㄴㄱㄹㅅㅎㄷㅈㅁㅂㅍㅌㅊㅋㄲ';
+const KO_VOWEL_RANK  = 'ㅏㅣㅡㅓㅗㅜㅐㅔㅑㅕㅛㅠㅒㅖ';
+const QWERTY_TO_KO   = {
+  q:'ㅂ',w:'ㅈ',e:'ㄷ',r:'ㄱ',t:'ㅅ',y:'ㅛ',u:'ㅕ',i:'ㅑ',o:'ㅐ',p:'ㅔ',
+  a:'ㅁ',s:'ㄴ',d:'ㅇ',f:'ㄹ',g:'ㅎ',h:'ㅗ',j:'ㅓ',k:'ㅏ',l:'ㅣ',
+  z:'ㅋ',x:'ㅌ',c:'ㅊ',v:'ㅍ',b:'ㅠ',n:'ㅜ',m:'ㅡ'
+};
+
+const PALETTES = {
+  beach:{
+    name:'Beach', emoji:'🌊',
+    bands:[{h:195,s:60,l:55},{h:42,s:70,l:58},{h:175,s:55,l:48},{h:210,s:65,l:44},{h:20,s:75,l:52},{h:280,s:60,l:52}],
+    swatches:['#4ab8cc','#d4a84a','#38a890','#2d6aa0','#d85e28','#9060c0'],
+  },
+  city:{
+    name:'City', emoji:'🌆',
+    bands:[{h:220,s:55,l:48},{h:35,s:80,l:45},{h:200,s:40,l:38},{h:350,s:65,l:44},{h:60,s:90,l:42},{h:150,s:70,l:38}],
+    swatches:['#4466aa','#b86818','#3a6878','#aa2240','#b89008','#189048'],
+  },
+  soft:{
+    name:'Soft', emoji:'🌸',
+    bands:[{h:340,s:55,l:60},{h:265,s:45,l:62},{h:55,s:60,l:60},{h:160,s:40,l:56},{h:20,s:60,l:62},{h:190,s:50,l:55}],
+    swatches:['#d87098','#9878c0','#c8b040','#60a888','#d08060','#58a8c0'],
+  },
+  night:{
+    name:'Night', emoji:'🌙',
+    bands:[{h:240,s:60,l:44},{h:280,s:55,l:44},{h:210,s:65,l:38},{h:300,s:50,l:36},{h:180,s:70,l:34},{h:55,s:90,l:50}],
+    swatches:['#3848aa','#6838aa','#1e4e88','#682880','#106070','#b09820'],
+  },
+  intense:{
+    name:'Intense', emoji:'🔥',
+    bands:[{h:5,s:85,l:42},{h:30,s:90,l:40},{h:45,s:95,l:38},{h:340,s:80,l:38},{h:270,s:70,l:36},{h:150,s:80,l:32}],
+    swatches:['#b01808','#c04808','#b07006','#a81840','#5010a0','#087830'],
+  },
+};
+
+const STYLE_NAMES = {watercolor:'Watercolor',oil:'Oil',inkwash:'Ink Wash',splatter:'Splatter',neon:'Neon'};
+
+// ══════════════════════════════════════════════════════════════════
+//  STROKE STORE
+//  Every mark is stored as an object. Deleted strokes are marked
+//  dimmed=true and permanently rendered at low opacity — they stay
+//  visible as a ghost, they just lose their colour strength.
+// ══════════════════════════════════════════════════════════════════
+const DIMMED_OPACITY = 0.13; // ghost opacity — visible but washed out
+let strokeStack = []; // all strokes, in order, { ...data, dimmed: bool }
+
+function redrawAll() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  strokeStack.forEach(s => {
+    ctx.save();
+    ctx.globalAlpha = s.dimmed ? DIMMED_OPACITY : 1;
+    drawStroke(s);
+    ctx.restore();
+  });
+}
+
+// ══════════════════════════════════════════════════════════════════
+//  BAND & HUE HELPERS
+// ══════════════════════════════════════════════════════════════════
+function getBand(key) {
+  const k = key.toLowerCase();
+  const enIdx = EN_FREQ_RANK.indexOf(k);
+  if (enIdx !== -1) return Math.min(5, Math.floor(enIdx / 4.4));
+  if (key === ' ') return 0;
+  if ('.,'.includes(key)) return 1;
+  if ('!?-\'"'.includes(key)) return 2;
+  if ('()[]{}:;'.includes(key)) return 3;
+  const nIdx = '1234567890'.indexOf(key);
+  if (nIdx !== -1) return Math.min(5, 2 + Math.floor(nIdx / 2));
+  if ('@#$%^&*+=<>/\\|`~'.includes(key)) return 5;
+  const koChar = QWERTY_TO_KO[k];
+  if (koChar) {
+    const cIdx = KO_CONS_RANK.indexOf(koChar);
+    if (cIdx !== -1) return Math.min(5, Math.floor(cIdx / 3));
+    const vIdx = KO_VOWEL_RANK.indexOf(koChar);
+    if (vIdx !== -1) return Math.min(5, Math.floor(vIdx / 2.5));
+  }
+  return 4;
+}
+
+function getHueNudge(key) {
+  let h = 0;
+  for (let i=0;i<key.length;i++) h=(h*31+key.charCodeAt(i))>>>0;
+  return (h%40)-20;
+}
+
+// ══════════════════════════════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════════════════════════════
+let selectedStyle   = 'watercolor';
+let selectedPalette = 'beach';
+let currentPalette  = PALETTES.beach;
+let canvas, ctx;
+let sessionCounts   = {};
+let totalKeystrokes = 0;
+let prevTextLength  = 0; // track textarea length to detect deletes
+
+// ══════════════════════════════════════════════════════════════════
+//  SETUP UI
+// ══════════════════════════════════════════════════════════════════
+function drawStylePreview(cv, style) {
+  const c = cv.getContext('2d');
+  const w = cv.width, h = cv.height;
+  c.clearRect(0,0,w,h);
+  // light bg
+  c.fillStyle = '#f5f2ec';
+  c.fillRect(0,0,w,h);
+  const cols = ['#4ab8cc','#d4a84a','#d87098','#3848aa','#b01808'];
+
+  if (style==='watercolor') {
+    [[.25,.4,38],[.6,.5,32],[.5,.22,26],[.35,.72,30]].forEach(([x,y,r],i)=>{
+      const g=c.createRadialGradient(x*w,y*h,0,x*w,y*h,r);
+      g.addColorStop(0,cols[i%cols.length]+'66'); g.addColorStop(1,cols[i%cols.length]+'00');
+      c.fillStyle=g; c.beginPath(); c.arc(x*w,y*h,r,0,Math.PI*2); c.fill();
+    });
+  } else if (style==='oil') {
+    [[.1,.5,.7,.45],[.2,.2,.8,.6],[.05,.65,.55,.82]].forEach(([x1,y1,x2,y2],i)=>{
+      const g=c.createLinearGradient(x1*w,y1*h,x2*w,y2*h);
+      g.addColorStop(0,cols[i]+'00'); g.addColorStop(.15,cols[i]+'dd');
+      g.addColorStop(.85,cols[(i+1)%cols.length]+'dd'); g.addColorStop(1,cols[(i+1)%cols.length]+'00');
+      c.strokeStyle=g; c.lineWidth=9; c.lineCap='round';
+      c.beginPath(); c.moveTo(x1*w,y1*h); c.quadraticCurveTo((x1+x2)/2*w,(y1+y2)/2*h+12,x2*w,y2*h); c.stroke();
+    });
+  } else if (style==='inkwash') {
+    [[.2,.4,34,28],[.6,.55,38,24],[.45,.25,26,20]].forEach(([x,y,rx,ry],i)=>{
+      c.save(); c.translate(x*w,y*h); c.scale(1,ry/rx);
+      const g=c.createRadialGradient(0,0,0,0,0,rx);
+      g.addColorStop(0,'rgba(60,90,140,0.45)'); g.addColorStop(1,'rgba(60,90,140,0)');
+      c.fillStyle=g; c.beginPath(); c.arc(0,0,rx,0,Math.PI*2); c.fill(); c.restore();
+    });
+    c.strokeStyle='rgba(50,70,120,0.4)'; c.lineWidth=1; c.lineCap='round';
+    [[.1,.2,.7,.5],[.2,.6,.8,.4]].forEach(([x1,y1,x2,y2])=>{
+      c.beginPath(); c.moveTo(x1*w,y1*h); c.bezierCurveTo(x1*w+18,y1*h+12,x2*w-15,y2*h-8,x2*w,y2*h); c.stroke();
+    });
+  } else if (style==='splatter') {
+    for(let i=0;i<55;i++){
+      const x=Math.random()*w,y=Math.random()*h,r=1+Math.random()*6;
+      c.fillStyle=cols[Math.floor(Math.random()*cols.length)]+(Math.random()>.5?'bb':'77');
+      c.beginPath(); c.arc(x,y,r,0,Math.PI*2); c.fill();
+    }
+  } else if (style==='neon') {
+    c.fillStyle='#0f0f18'; c.fillRect(0,0,w,h);
+    [[.2,.4,28,180],[.55,.28,22,300],[.72,.62,20,55]].forEach(([x,y,r,hue])=>{
+      for(let p=2;p>=0;p--){
+        const g=c.createRadialGradient(x*w,y*h,0,x*w,y*h,r*(1+p*.7));
+        g.addColorStop(0,`hsla(${hue},100%,68%,${.65-p*.18})`);
+        g.addColorStop(1,`hsla(${hue},100%,50%,0)`);
+        c.fillStyle=g; c.beginPath(); c.arc(x*w,y*h,r*(1+p*.7),0,Math.PI*2); c.fill();
+      }
+    });
+  }
+}
+
+function buildSetup() {
+  const sg = document.getElementById('styleGrid');
+  Object.keys(STYLE_NAMES).forEach(id => {
+    const btn = document.createElement('div');
+    btn.className='style-btn'+(id===selectedStyle?' active':'');
+    const cv=document.createElement('canvas'); cv.width=160; cv.height=100;
+    const lbl=document.createElement('span'); lbl.textContent=STYLE_NAMES[id];
+    btn.appendChild(cv); btn.appendChild(lbl);
+    btn.addEventListener('click',()=>{
+      document.querySelectorAll('.style-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active'); selectedStyle=id;
+    });
+    sg.appendChild(btn);
+    requestAnimationFrame(()=>drawStylePreview(cv,id));
+  });
+
+  const pg = document.getElementById('paletteGrid');
+  Object.entries(PALETTES).forEach(([id,pal])=>{
+    const btn=document.createElement('div');
+    btn.className='palette-btn'+(id===selectedPalette?' active':'');
+    const sw=document.createElement('div'); sw.className='palette-swatches';
+    pal.swatches.forEach(c=>{
+      const s=document.createElement('div'); s.className='swatch'; s.style.background=c; sw.appendChild(s);
+    });
+    const nm=document.createElement('div'); nm.className='palette-name';
+    nm.textContent=pal.emoji+' '+pal.name;
+    btn.appendChild(sw); btn.appendChild(nm);
+    btn.addEventListener('click',()=>{
+      document.querySelectorAll('.palette-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active'); selectedPalette=id;
+    });
+    pg.appendChild(btn);
+  });
+
+  document.getElementById('startBtn').addEventListener('click', startApp);
+}
+
+// ══════════════════════════════════════════════════════════════════
+//  APP INIT
+// ══════════════════════════════════════════════════════════════════
+function startApp() {
+  currentPalette = PALETTES[selectedPalette];
+  document.getElementById('setup').classList.add('hidden');
+  document.getElementById('app').classList.add('visible');
+
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-GB',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  document.getElementById('dateDisplay').textContent = dateStr;
+  document.getElementById('modePill').textContent = STYLE_NAMES[selectedStyle]+' · '+currentPalette.emoji+' '+currentPalette.name;
+  document.getElementById('topCenter').textContent = dateStr;
+
+  canvas = document.getElementById('painting');
+  resizeCanvas();
+  window.addEventListener('resize', ()=>{resizeCanvas(); redrawAll();});
+
+  const journal = document.getElementById('journal');
+  journal.addEventListener('keydown', onKey);
+  // Also watch input event to catch paste-deletes, autocorrect, etc.
+  journal.addEventListener('input', onInput);
+  document.getElementById('exportBtn').addEventListener('click', exportPNG);
+  document.getElementById('clearBtn').addEventListener('click', clearAll);
+  journal.focus();
+}
+
+function resizeCanvas() {
+  const panel = document.getElementById('canvas-panel');
+  canvas.width  = panel.clientWidth;
+  canvas.height = panel.clientHeight;
+  ctx = canvas.getContext('2d');
+}
+
+// ══════════════════════════════════════════════════════════════════
+//  INPUT HANDLERS
+// ══════════════════════════════════════════════════════════════════
+const SPLASH_KEYS = new Set([' ','.',',','!','?','Enter','。','，','！','？']);
+const IGNORE_KEYS = new Set(['Shift','Control','Alt','Meta','ArrowUp','ArrowDown',
+  'ArrowLeft','ArrowRight','Home','End','PageUp','PageDown','Tab','Escape',
+  'CapsLock','Insert','F1','F2','F3','F4','F5','F6','F7','F8','F9','F10','F11','F12']);
+const DELETE_KEYS = new Set(['Backspace','Delete']);
+
+function onKey(e) {
+  if (IGNORE_KEYS.has(e.key)) return;
+
+  if (DELETE_KEYS.has(e.key)) {
+    // Will handle in onInput after text is actually removed
+    return;
+  }
+
+  const key = e.key;
+  sessionCounts[key] = (sessionCounts[key]||0) + 1;
+  totalKeystrokes++;
+
+  const band    = getBand(key);
+  const bandDef = currentPalette.bands[band];
+  const hue     = ((bandDef.h + getHueNudge(key)) % 360 + 360) % 360;
+  const freq    = sessionCounts[key];
+  const satMod  = Math.min(1, 0.6 + freq * 0.015);
+  const sat     = Math.round(bandDef.s * satMod);
+  const lit     = bandDef.l;
+  const isSplash = SPLASH_KEYS.has(key);
+
+  addStroke({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    hue, sat, lit, isSplash, band,
+    style: selectedStyle,
+  });
+
+  updateStats();
+  if (isSplash) flashSplash();
+}
+
+// Detects net character removal (backspace, delete, select+delete, paste-over)
+function onInput(e) {
+  const journal = document.getElementById('journal');
+  const newLen  = journal.value.length;
+  const removed = prevTextLength - newLen;
+
+  if (removed > 0) {
+    triggerDim(removed);
+  }
+
+  prevTextLength = newLen;
+  updateStats();
+}
+
+function triggerDim(count) {
+  // Mark the most recent 'count' un-dimmed strokes as dimmed
+  let dimmed = 0;
+  for (let i = strokeStack.length - 1; i >= 0 && dimmed < count; i--) {
+    if (!strokeStack[i].dimmed) { strokeStack[i].dimmed = true; dimmed++; }
+  }
+  if (dimmed > 0) redrawAll();
+}
+
+// ══════════════════════════════════════════════════════════════════
+//  STROKE MANAGEMENT
+// ══════════════════════════════════════════════════════════════════
+function addStroke(s) {
+  s.dimmed = false;
+  strokeStack.push(s);
+  // Draw directly onto canvas (fast path — no need for full redraw on every keystroke)
+  ctx.save();
+  ctx.globalAlpha = 1;
+  drawStroke(s);
+  ctx.restore();
+}
+
+function drawStroke(s) {
+  const {x, y, hue, sat, lit, isSplash, band, style} = s;
+  if (style==='watercolor') drawWatercolor(x,y,hue,sat,lit,isSplash,band);
+  else if (style==='oil')   drawOil(x,y,hue,sat,lit,isSplash,band);
+  else if (style==='inkwash') drawInkwash(x,y,hue,sat,lit,isSplash,band);
+  else if (style==='splatter') drawSplatter(x,y,hue,sat,lit,isSplash);
+  else if (style==='neon')  drawNeon(x,y,hue,sat,lit,isSplash,band);
+}
+
+// ── Watercolor ──
+function drawWatercolor(x,y,hue,sat,lit,isSplash,band) {
+  const baseR = isSplash ? 55+Math.random()*45 : 14+band*5+Math.random()*16;
+  ctx.globalCompositeOperation='source-over';
+  for(let ring=3;ring>=0;ring--){
+    const r=baseR*(1+ring*0.28);
+    const alpha=isSplash?(0.11-ring*0.022):(0.09-ring*0.018);
+    const grd=ctx.createRadialGradient(x,y,0,x+ring*3,y+ring*2,r);
+    grd.addColorStop(0,`hsla(${hue},${sat}%,${lit}%,${alpha})`);
+    grd.addColorStop(0.5,`hsla(${hue},${sat-5}%,${lit-3}%,${alpha*0.5})`);
+    grd.addColorStop(1,`hsla(${hue},${sat}%,${lit}%,0)`);
+    ctx.fillStyle=grd;
+    ctx.beginPath();
+    ctx.ellipse(x+ring*2,y+ring,r,r*(0.72+Math.random()*0.28),Math.random()*Math.PI,0,Math.PI*2);
+    ctx.fill();
+  }
+}
+
+// ── Oil ──
+function drawOil(x,y,hue,sat,lit,isSplash,band) {
+  const len=isSplash?110+Math.random()*80:35+band*8+Math.random()*35;
+  const wid=isSplash?16+Math.random()*12:5+band*2+Math.random()*7;
+  const angle=Math.random()*Math.PI*2;
+  const x2=x+Math.cos(angle)*len, y2=y+Math.sin(angle)*len;
+  const mx=(x+x2)/2+Math.sin(angle+1)*(len*0.18);
+  const my=(y+y2)/2+Math.cos(angle+1)*(len*0.14);
+  ctx.globalCompositeOperation='source-over';
+  const grd=ctx.createLinearGradient(x,y,x2,y2);
+  grd.addColorStop(0,`hsla(${hue},${sat}%,${lit}%,0)`);
+  grd.addColorStop(.12,`hsla(${hue},${sat}%,${lit}%,0.92)`);
+  grd.addColorStop(.88,`hsla(${(hue+15)%360},${sat}%,${lit-3}%,0.92)`);
+  grd.addColorStop(1,`hsla(${(hue+15)%360},${sat}%,${lit}%,0)`);
+  ctx.strokeStyle=grd; ctx.lineWidth=wid; ctx.lineCap='round';
+  ctx.beginPath(); ctx.moveTo(x,y); ctx.quadraticCurveTo(mx,my,x2,y2); ctx.stroke();
+  ctx.strokeStyle=`hsla(${hue},${sat-20}%,${lit+20}%,0.18)`;
+  ctx.lineWidth=2;
+  ctx.beginPath(); ctx.moveTo(x,y-2); ctx.quadraticCurveTo(mx,my-2,x2,y2-2); ctx.stroke();
+}
+
+// ── Ink Wash ──
+function drawInkwash(x,y,hue,sat,lit,isSplash,band) {
+  ctx.globalCompositeOperation='source-over';
+  if(isSplash){
+    const r=65+Math.random()*55;
+    const grd=ctx.createRadialGradient(x,y,0,x,y,r);
+    grd.addColorStop(0,`hsla(${hue},${sat*0.5}%,${lit*0.65}%,0.16)`);
+    grd.addColorStop(1,`hsla(${hue},${sat*0.5}%,${lit*0.65}%,0)`);
+    ctx.fillStyle=grd; ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
+  }
+  const len2=18+band*5+Math.random()*28;
+  const ang2=Math.random()*Math.PI*2;
+  ctx.strokeStyle=`hsla(${hue},${sat*0.55}%,${lit*0.55}%,${isSplash?0.65:0.38})`;
+  ctx.lineWidth=0.7+Math.random()*1.4; ctx.lineCap='round';
+  ctx.beginPath(); ctx.moveTo(x,y);
+  ctx.lineTo(x+Math.cos(ang2)*len2,y+Math.sin(ang2)*len2); ctx.stroke();
+}
+
+// ── Splatter ──
+function drawSplatter(x,y,hue,sat,lit,isSplash) {
+  ctx.globalCompositeOperation='source-over';
+  const count=isSplash?10+Math.floor(Math.random()*10):1;
+  for(let i=0;i<count;i++){
+    const dx=isSplash?(Math.random()-.5)*110:0;
+    const dy=isSplash?(Math.random()-.5)*110:0;
+    const r=isSplash?2+Math.random()*13:2+Math.random()*8;
+    ctx.fillStyle=`hsla(${hue},${sat}%,${lit}%,${0.5+Math.random()*0.5})`;
+    ctx.beginPath(); ctx.arc(x+dx,y+dy,r,0,Math.PI*2); ctx.fill();
+    if(r>6&&isSplash){
+      const sLen=8+Math.random()*32, sAng=Math.random()*Math.PI*2;
+      ctx.strokeStyle=`hsla(${hue},${sat}%,${lit}%,0.28)`;
+      ctx.lineWidth=1+Math.random();
+      ctx.beginPath(); ctx.moveTo(x+dx,y+dy);
+      ctx.lineTo(x+dx+Math.cos(sAng)*sLen,y+dy+Math.sin(sAng)*sLen); ctx.stroke();
+    }
+  }
+}
+
+// ── Neon ──
+function drawNeon(x,y,hue,sat,lit,isSplash,band) {
+  ctx.globalCompositeOperation='lighter';
+  const baseR=isSplash?50+Math.random()*40:10+band*4+Math.random()*14;
+  const passes=isSplash?4:3;
+  for(let p=passes;p>=0;p--){
+    const r=baseR*(1+p*0.5);
+    const grd=ctx.createRadialGradient(x,y,0,x,y,r);
+    grd.addColorStop(0,`hsla(${hue},100%,${lit}%,${isSplash?0.55-p*0.1:0.35-p*0.07})`);
+    grd.addColorStop(0.3,`hsla(${hue},100%,${lit-10}%,${0.12-p*0.02})`);
+    grd.addColorStop(1,`hsla(${hue},100%,${lit-20}%,0)`);
+    ctx.fillStyle=grd; ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
+  }
+  ctx.globalCompositeOperation='source-over';
+  ctx.fillStyle=`hsla(${hue},100%,92%,${isSplash?0.9:0.6})`;
+  ctx.beginPath(); ctx.arc(x,y,isSplash?4:2,0,Math.PI*2); ctx.fill();
+}
+
+// ══════════════════════════════════════════════════════════════════
+//  STATS & UI
+// ══════════════════════════════════════════════════════════════════
+function updateStats() {
+  document.getElementById('statKeys').textContent = totalKeystrokes.toLocaleString()+' keystrokes';
+  let topKey='', topCount=0;
+  Object.entries(sessionCounts).forEach(([k,v])=>{ if(v>topCount){topCount=v;topKey=k;} });
+  if(topKey){
+    const dk=topKey===' '?'Space':topKey;
+    document.getElementById('statTop').textContent=`Most used: ${dk} (×${topCount})`;
+  }
+  const text=document.getElementById('journal').value;
+  const wc=text.trim()?text.trim().split(/\s+/).length:0;
+  document.getElementById('wcDisplay').textContent=wc+(wc===1?' word':' words');
+}
+
+function flashSplash() {
+  const dot=document.getElementById('splashDot');
+  dot.classList.add('flash');
+  setTimeout(()=>dot.classList.remove('flash'),120);
+}
+
+function clearAll() {
+  if (!confirm("Clear today's painting and text?")) return;
+  strokeStack = [];
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  sessionCounts = {};
+  totalKeystrokes = 0;
+  document.getElementById('journal').value = '';
+  prevTextLength = 0;
+  updateStats();
+}
+
+function exportPNG() {
+  const exportCanvas = document.createElement('canvas');
+  exportCanvas.width  = canvas.width;
+  exportCanvas.height = canvas.height;
+  const ectx = exportCanvas.getContext('2d');
+  ectx.fillStyle = '#f5f2ec';
+  ectx.fillRect(0, 0, exportCanvas.width, exportCanvas.height);
+  ectx.drawImage(canvas, 0, 0);
+
+  const now = new Date();
+  const dateStr = now.toISOString().slice(0, 10);
+  const palName = currentPalette.name.toLowerCase();
+  const filename = `chroma-journal-${dateStr}-${palName}.png`;
+
+  exportCanvas.toBlob(blob => {
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }, 'image/png');
+}
+
+// ══════════════════════════════════════════════════════════════════
+//  BOOT
+// ══════════════════════════════════════════════════════════════════
+buildSetup();
+</script>
+</body>
+</html>
