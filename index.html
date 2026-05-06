@@ -556,6 +556,7 @@ function startApp() {
 
   const j = document.getElementById('journal');
   j.addEventListener('keydown', onKey);
+  j.addEventListener('paste', onPaste);
   j.addEventListener('input', onInput);
   document.getElementById('exportBtn').addEventListener('click', exportPNG);
   document.getElementById('clearBtn').addEventListener('click', clearAll);
@@ -578,38 +579,69 @@ const IGNORE_KEYS  = new Set(['Shift','Control','Alt','Meta','ArrowUp','ArrowDow
   'CapsLock','Insert','F1','F2','F3','F4','F5','F6','F7','F8','F9','F10','F11','F12']);
 const DELETE_KEYS  = new Set(['Backspace','Delete']);
 
+// Track paste state so onInput knows to paint pasted characters
+let isPasting = false;
+let prevText  = '';
+
 function onKey(e) {
   if (IGNORE_KEYS.has(e.key) || DELETE_KEYS.has(e.key)) return;
 
   const key = e.key === 'Enter' ? '\n' : e.key;
+  paintChar(key);
+  updateStats();
+}
+
+// Called for every individual character painted onto the canvas
+function paintChar(key) {
   sessionCounts[key] = (sessionCounts[key]||0) + 1;
   totalKeystrokes++;
 
   const [h, s, l] = resolveColour(key);
-  // Session frequency boost: more presses → slightly richer saturation
-  const freq    = sessionCounts[key];
-  const satBoost = Math.min(10, freq * 0.4);
-  const isSplash = SPLASH_KEYS.has(key);
+  const freq      = sessionCounts[key];
+  const satBoost  = Math.min(10, freq * 0.4);
+  const isSplash  = SPLASH_KEYS.has(key);
 
-  // ── Generate ALL randomness now, store it ──
   const W = canvas.width, H = canvas.height;
   const x = Math.random() * W;
   const y = Math.random() * H;
-
-  // Pre-generate random seeds for each style's needs
   const rands = Array.from({length: 20}, () => Math.random());
 
   addStroke({ key, h, s: s + satBoost, l, isSplash, x, y, rands, dimmed: false });
-
-  updateStats();
   if (isSplash) flashSplash();
 }
 
+function onPaste() {
+  isPasting = true;
+  prevText  = document.getElementById('journal').value;
+}
+
 function onInput() {
-  const j = document.getElementById('journal');
-  const newLen = j.value.length;
+  const j      = document.getElementById('journal');
+  const newText = j.value;
+  const newLen  = newText.length;
+
+  if (isPasting) {
+    isPasting = false;
+    // Find the inserted text by comparing old and new value.
+    // Simple approach: new text minus old text = pasted content.
+    // We find the first difference point then extract what was inserted.
+    const oldText  = prevText;
+    let start = 0;
+    while (start < oldText.length && start < newText.length && oldText[start] === newText[start]) start++;
+    const inserted = newText.slice(start, start + (newText.length - oldText.length));
+    // Paint each character in the pasted string
+    for (const char of inserted) {
+      paintChar(char === '\n' ? '\n' : char);
+    }
+    prevText = newText;
+    prevTextLength = newLen;
+    updateStats();
+    return;
+  }
+
   const removed = prevTextLength - newLen;
   if (removed > 0) triggerDim(removed);
+  prevText = newText;
   prevTextLength = newLen;
   updateStats();
 }
